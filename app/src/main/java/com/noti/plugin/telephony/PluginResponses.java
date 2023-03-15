@@ -1,6 +1,7 @@
 package com.noti.plugin.telephony;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.SmsManager;
@@ -11,7 +12,8 @@ import com.noti.plugin.listener.PluginResponse;
 public class PluginResponses implements PluginResponse {
     @Override
     public void onReceiveRemoteAction(Context context, String type, String args) {
-        if (type.equals("send_sms") && Application.getSharedPreferences(context).getBoolean("messageReceiveEnabled", true)) {
+        SharedPreferences prefs = Application.getSharedPreferences(context);
+        if (type.equals("send_sms") && (prefs.getBoolean("messageReceiveEnabled", false) || prefs.getBoolean("callReceiveEnabled", false))) {
             String[] data = args.split("\\|");
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(data[0], null, data[1], null, null);

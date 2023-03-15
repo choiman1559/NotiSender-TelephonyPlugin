@@ -22,6 +22,8 @@ public class Application extends android.app.Application {
         plugin.setAppPackageName(context.getPackageName());
         plugin.setPluginReady(checkTelephonyPermission(context));
         plugin.setSettingClass(SettingActivity.class);
+        plugin.setPluginTitle("Telephony Plugin");
+        plugin.setRequireSensitiveAPI(false);
     }
 
     public static boolean checkTelephonyPermission(Context context) {
