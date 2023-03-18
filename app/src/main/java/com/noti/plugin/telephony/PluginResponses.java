@@ -7,11 +7,12 @@ import android.os.Looper;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
+import com.noti.plugin.data.PairDeviceInfo;
 import com.noti.plugin.listener.PluginResponse;
 
 public class PluginResponses implements PluginResponse {
     @Override
-    public void onReceiveRemoteAction(Context context, String type, String args) {
+    public void onReceiveRemoteActionRequest(Context context, PairDeviceInfo device, String type, String args) {
         SharedPreferences prefs = Application.getSharedPreferences(context);
         if (type.equals("send_sms") && (prefs.getBoolean("messageReceiveEnabled", false) || prefs.getBoolean("callReceiveEnabled", false))) {
             String[] data = args.split("\\|");
@@ -22,7 +23,7 @@ public class PluginResponses implements PluginResponse {
     }
 
     @Override
-    public void onReceiveRemoteData(Context context, String type) {
+    public void onReceiveRemoteDataRequest(Context context, PairDeviceInfo device, String type) {
 
     }
 
