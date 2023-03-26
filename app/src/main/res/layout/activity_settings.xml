@@ -45,6 +45,40 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginVertical="12dp"
+                    android:text="Permissions"
+                    android:textColor="@color/ui_accent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Permit_Sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sms Access Permission"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="12dp"
+                    android:textColor="@color/ui_bg"
+                    app:iconTint="@color/ui_bg"
+                    app:icon="@drawable/baseline_message_24"
+                    android:background="@drawable/round_corner"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Permit_Alarm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Alarm Access Permission"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="12dp"
+                    android:textColor="@color/ui_bg"
+                    app:iconTint="@color/ui_bg"
+                    app:icon="@drawable/baseline_edit_notifications_24"
+                    android:background="@drawable/round_corner"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginVertical="12dp"
                     android:text="Configuration"
                     android:textColor="@color/ui_accent" />
 
