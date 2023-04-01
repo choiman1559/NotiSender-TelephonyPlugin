@@ -1,14 +1,19 @@
 package com.noti.plugin.telephony;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
-import android.util.Log;
+
+import androidx.annotation.RequiresPermission;
 
 import com.noti.plugin.process.PluginAction;
 
@@ -28,7 +33,7 @@ public class TelecomReceiver extends BroadcastReceiver {
                     String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
                     if (phoneNumber != null && TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-                        PluginAction.pushCallData(context, phoneNumber);
+                        PluginAction.pushCallData(context, phoneNumber, getContactNameFromPhoneNumber(context, phoneNumber));
                     }
                 }
                 break;
@@ -36,9 +41,33 @@ public class TelecomReceiver extends BroadcastReceiver {
             case Telephony.Sms.Intents.SMS_RECEIVED_ACTION:
                 if (prefs.getBoolean("messageReceiveEnabled", false)) {
                     SmsMessage message = Telephony.Sms.Intents.getMessagesFromIntent(intent)[0];
-                    PluginAction.pushMessageData(context, message.getOriginatingAddress(), message.getMessageBody());
+                    String address = message.getOriginatingAddress();
+                    PluginAction.pushMessageData(context, address, getContactNameFromPhoneNumber(context, address), message.getMessageBody());
                 }
                 break;
         }
+    }
+
+    public static String getContactNameFromPhoneNumber(Context context, String phoneNumber) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+        Cursor cursor = context.getContentResolver().query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
+
+        if (cursor == null) {
+            return "";
+        }
+
+        String contactName = "";
+        if(cursor.moveToFirst()) {
+            int index = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
+            if(index > -1) {
+                contactName = cursor.getString(index);
+            }
+        }
+
+        if(!cursor.isClosed()) {
+            cursor.close();
+        }
+
+        return contactName;
     }
 }

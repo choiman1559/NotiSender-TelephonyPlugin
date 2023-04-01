@@ -58,6 +58,7 @@ public class SettingActivity extends AppCompatActivity {
                     android.Manifest.permission.READ_SMS,
                     android.Manifest.permission.RECEIVE_SMS,
                     android.Manifest.permission.READ_CALL_LOG,
+                    Manifest.permission.READ_CONTACTS,
                     Manifest.permission.READ_PHONE_STATE
             };
 
@@ -68,10 +69,10 @@ public class SettingActivity extends AppCompatActivity {
         Test_RCS.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         Test_RCS.setOnClickListener(v -> {
             Uri uri = Uri.parse("content://im/chat");
-            Cursor cursor = getContentResolver().query(uri ,null, null, null, "date DESC LIMIT 40 OFFSET 0");
+            Cursor cursor = getContentResolver().query(uri ,null, null, null, null);
             if(cursor != null){
                 int columnCount = cursor.getColumnCount();
-                if (cursor.moveToFirst()) {
+                if (cursor.moveToLast()) {
                     for(int i = 0; i < columnCount; i++) {
                         Log.e("__T", "[" + i + "=" + cursor.getColumnName(i) + "] " + cursor.getString(i));
                     }
