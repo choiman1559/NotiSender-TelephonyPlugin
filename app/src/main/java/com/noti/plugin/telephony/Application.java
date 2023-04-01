@@ -6,12 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
-import androidx.core.app.NotificationManagerCompat;
-
 import com.noti.plugin.Plugin;
-import com.noti.plugin.process.PluginAction;
-
-import java.util.Set;
 
 public class Application extends android.app.Application {
     @Override
@@ -33,7 +28,7 @@ public class Application extends android.app.Application {
     }
 
     public static void checkPermission(Context context) {
-        Plugin.getInstance().setPluginReady(checkTelephonyPermission(context) && checkNotificationPermission(context));
+        Plugin.getInstance().setPluginReady(checkTelephonyPermission(context));
     }
 
     public static boolean checkTelephonyPermission(Context context) {
@@ -52,17 +47,6 @@ public class Application extends android.app.Application {
                     isPermissionGranted = false;
                 }
             }
-        }
-
-        return isPermissionGranted;
-    }
-
-    public static boolean checkNotificationPermission(Context context) {
-        boolean isPermissionGranted = true;
-
-        Set<String> sets = NotificationManagerCompat.getEnabledListenerPackages(context);
-        if (!sets.contains(context.getPackageName())) {
-            isPermissionGranted = false;
         }
 
         return isPermissionGranted;

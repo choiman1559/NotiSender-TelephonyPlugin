@@ -7,7 +7,23 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="com.samsung.rcs.im.READ_PERMISSION" />
+    <uses-permission android:name="com.sec.ims.android.rcs.READ_PERMISSION" />
+    <uses-permission android:name="com.sec.ims.android.rcs.WRITE_PERMISSION" />
+    <uses-permission android:name="com.samsung.app.cmstore.MSGDATA_PERMISSION" />
+    <uses-permission android:name="com.sec.imsservice.PERMISSION" />
+    <uses-permission android:name="com.sec.imsservice.READ_IMS_PERMISSION" />
+    <uses-permission android:name="com.sec.imsservice.WRITE_IMS_PERMISSION" />
+    <uses-permission android:name="com.samsung.android.messaging.extension.chn.permission.READ_MESSAGE" />
+    <uses-permission android:name="com.samsung.android.messaging.extension.chn.permission.WRITE_MESSAGE" />
+    <uses-permission android:name="com.samsung.android.messaging.permission.READ_MESSAGE" />
+    <uses-permission android:name="com.samsung.android.communicationservice.permission.CHAMELEON_MMS_UPDATE" />
+    <uses-permission android:name="sec.android.permission.READ_MSG_PREF" />
+    <uses-permission android:name="sec.android.permission.WRITE_MSG_PREF" />
+    <uses-permission android:name="com.samsung.android.messaging.extension.chn.permission.READ_MESSAGE" />
+    <uses-permission android:name="com.samsung.android.messaging.extension.chn.permission.WRITE_MESSAGE" />
 
     <application
         android:name=".Application"
@@ -22,7 +38,7 @@
 
         <activity
             android:name=".SettingActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,20 +48,84 @@
         <receiver
             android:name=".TelecomReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".NotiListenerService"
-            android:label="Read notifications for detect SMS incoming"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
+        <receiver
+            android:name=".RcsReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.samsung.rcs.im.READ_PERMISSION">
+            <intent-filter android:priority="1">
+                <category android:name="com.samsung.rcs.framework.instantmessaging.category.ACTION" />
+                <category android:name="com.samsung.rcs.framework.instantmessaging" />
+
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.CREATE_CHAT_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_TYPING_NOTIFICATION" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_CHAT_CLOSED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_NEW_MESSAGE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_CHAT_INVITATION" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_CHAT_ESTABLISHED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.SEND_MESSAGE_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_MESSAGE_NOTIFICATION_STATUS" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_SEND_MESSAGE_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.ADD_PARTICIPANTS_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_MESSAGE_INSERTED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_PARTICIPANT_INSERTED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_PARTICIPANTS_INSERTED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_PARTICIPANT_DELETED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_PARTICIPANTS_DELETED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.GET_IS_COMPOSING_ACTIVE_URIS_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.GET_LAST_MESSAGES_SENT_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.MESSAGE_REVOKE_TIMER_EXPIRED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.CANCEL_MESSAGE_RESPONSE" />
+                <action android:name="com.samsung.android.communicationservice.ACTION_RESERVED_SEND" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_GROUPCHAT_SESSION" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_CHAT_SUBJECT_UPDATED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_PARTICIPANT_ALIAS_UPDATED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.CHANGE_GROUPCHAT_LEADER_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_GROUPCHAT_ICON_UPDATED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.SET_GROUPCHAT_ICON_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.RECEIVE_GROUPCHAT_ICON_DELETED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.CHANGE_GROUP_ALIAS_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.SET_CHAT_SUBJECT_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.REMOVE_PARTICIPANTS_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.ANSWER_CHAT_INVITATION_RESPONSE" />
+                <action android:name="com.samsung.mms.rcs.publicaccount.ACTION_DOWNLOAD_INCOMMING" />
+                <action android:name="com.samsung.mms.rcs.publicaccount.ACTION_DOWNLOAD_INPROCESS" />
+                <action android:name="com.samsung.mms.rcs.publicaccount.ACTION_DOWNLOAD_COMPLETED" />
+                <action android:name="com.samsung.mms.rcs.publicaccount.ACTION_RECEIVE_MIXED_TYPE_MSG_COMPLETED" />
+                <action android:name="com.samsung.rcs.framework.instantmessaging.action.REPORT_MESSAGES_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.chatbot.action.REPORT_CHATBOT_AS_SPAM_RESPONSE" />
             </intent-filter>
-        </service>
+            <intent-filter android:priority="1">
+                <category android:name="com.samsung.rcs.framework.geolocationshare.category.NOTIFICATION" />
+
+                <action android:name="com.samsung.rcs.framework.geolocationshare.action.RECEIVE_SHARE_LOCATION_IN_CHAT_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.geolocationshare.action.SHARE_LOCATION_IN_CHAT_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.geolocationshare.action.RECEIVE_LOCATION_SHARE_MESSAGE" />
+                <action android:name="com.samsung.rcs.framework.geolocationshare.action.RECEIVE_LOCATION_NOTIFICATION_STATUS" />
+                <action android:name="com.samsung.rcs.framework.geolocationshare.action.CREATE_SHARE_LOCATION_INCALL_RESPONSE" />
+                <action android:name="com.samsung.rcs.framework.geolocationshare.action.SHARE_LOCATION_INCALL_COMPLETED" />
+            </intent-filter>
+            <intent-filter android:priority="1">
+                <category android:name="com.samsung.rcs.framework.filetransfer.category.NOTIFICATION" />
+
+                <action android:name="com.samsung.rcs.framework.filetransfer.notification.TRANSFER_INCOMING" />
+                <action android:name="com.samsung.rcs.framework.filetransfer.notification.TRANSFER_PROGRESS" />
+                <action android:name="com.samsung.rcs.framework.filetransfer.notification.TRANSFER_INTERRUPTED" />
+                <action android:name="com.samsung.rcs.framework.filetransfer.notification.TRANSFER_COMPLETED" />
+                <action android:name="com.samsung.rcs.framework.filetransfer.notification.TRANSFER_CANCELED" />
+                <action android:name="com.samsung.rcs.framework.filetransfer.notification.TRANSFER_ATTACHED" />
+                <action android:name="com.samsung.rcs.framework.filetransfer.notification.REQUEST_FAILED" />
+                <action android:name="com.samsung.rcs.framework.filetransfer.request.REQUEST_FILE_RESIZE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

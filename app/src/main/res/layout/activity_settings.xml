@@ -62,10 +62,10 @@
                     android:background="@drawable/round_corner"/>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/Permit_Alarm"
+                    android:id="@+id/Test_RCS"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Alarm Access Permission"
+                    android:text="Test RCS Cursor"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_marginVertical="12dp"

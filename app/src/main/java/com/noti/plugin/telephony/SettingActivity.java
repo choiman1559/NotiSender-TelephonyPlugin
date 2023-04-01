@@ -1,9 +1,13 @@
 package com.noti.plugin.telephony;
 
 import android.Manifest;
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,7 +22,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingActivity extends AppCompatActivity {
 
     MaterialButton Permit_Sms;
-    MaterialButton Permit_Alarm;
+    MaterialButton Test_RCS;
 
     ActivityResultLauncher<String[]> startPermissionPermit = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
         for(Boolean isGranted : result.values()) {
@@ -35,15 +39,8 @@ public class SettingActivity extends AppCompatActivity {
             }
         }
 
-        setButtonCompleted(Permit_Sms, "Sms Access Permitted");
+        setButtonCompleted(Permit_Sms);
         Application.checkPermission(SettingActivity.this);
-    });
-
-    ActivityResultLauncher<Intent> startAlarmAccessPermit = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if(Application.checkNotificationPermission(this)) {
-            Application.checkPermission(SettingActivity.this);
-            setButtonCompleted(Permit_Alarm, "Alarm Access Permitted");
-        }
     });
 
     @Override
@@ -55,8 +52,6 @@ public class SettingActivity extends AppCompatActivity {
         SharedPreferences prefs = Application.getSharedPreferences(this);
 
         Permit_Sms = findViewById(R.id.Permit_Sms);
-        Permit_Alarm = findViewById(R.id.Permit_Alarm);
-
         Permit_Sms.setOnClickListener(v -> {
             String[] permissions = new String[]{
                     android.Manifest.permission.SEND_SMS,
@@ -69,14 +64,24 @@ public class SettingActivity extends AppCompatActivity {
             startPermissionPermit.launch(permissions);
         });
 
-        Permit_Alarm.setOnClickListener(v -> startAlarmAccessPermit.launch(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")));
+        Test_RCS = findViewById(R.id.Test_RCS);
+        Test_RCS.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+        Test_RCS.setOnClickListener(v -> {
+            Uri uri = Uri.parse("content://im/chat");
+            Cursor cursor = getContentResolver().query(uri ,null, null, null, "date DESC LIMIT 40 OFFSET 0");
+            if(cursor != null){
+                int columnCount = cursor.getColumnCount();
+                if (cursor.moveToFirst()) {
+                    for(int i = 0; i < columnCount; i++) {
+                        Log.e("__T", "[" + i + "=" + cursor.getColumnName(i) + "] " + cursor.getString(i));
+                    }
+                }
+                cursor.close();
+            }
+        });
 
         if(Application.checkTelephonyPermission(this)) {
-            setButtonCompleted(Permit_Sms, "Sms Access Permitted");
-        }
-
-        if(Application.checkNotificationPermission(this)) {
-            setButtonCompleted(Permit_Alarm, "Alarm Access Permitted");
+            setButtonCompleted(Permit_Sms);
         }
 
         SwitchMaterial callReceiveEnabled = findViewById(R.id.callReceiveEnabled);
@@ -101,9 +106,10 @@ public class SettingActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener((v) -> this.finish());
     }
 
-    void setButtonCompleted(MaterialButton button, String message) {
+    @SuppressLint("SetTextI18n")
+    void setButtonCompleted(MaterialButton button) {
         button.setEnabled(false);
-        button.setText(message);
+        button.setText("Sms Access Permitted");
         button.setIcon(AppCompatResources.getDrawable(SettingActivity.this, R.drawable.baseline_check_24));
     }
 }
