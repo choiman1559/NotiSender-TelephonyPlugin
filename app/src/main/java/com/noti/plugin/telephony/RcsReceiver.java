@@ -86,7 +86,8 @@ public class RcsReceiver extends BroadcastReceiver {
                         String address = indexOf4 > 0 ? remoteUri.substring(0, indexOf4) : remoteUri;
                         String body = getStringFromCursor(cursor, "body");
 
-                        PluginAction.pushMessageData(context, address, TelecomReceiver.getContactNameFromPhoneNumber(context, address), body);
+                        String args = address + "|" + body + "|" + TelecomReceiver.getContactNameFromPhoneNumber(context, address);
+                        PluginAction.responseHostApiInject(context, null, TelecomReceiver.ACTION_PUSH_MESSAGE_DATA, args);
                         return;
                     }
                 } catch (Throwable th2) {
@@ -126,7 +127,8 @@ public class RcsReceiver extends BroadcastReceiver {
                 }
 
                 if(imdnIdFromCursor.equals(imdnIdFromIntent)) {
-                    PluginAction.pushMessageData(context, address, TelecomReceiver.getContactNameFromPhoneNumber(context, address), message);
+                    String args = address + "|" + message + "|" + TelecomReceiver.getContactNameFromPhoneNumber(context, address);
+                    PluginAction.responseHostApiInject(context, null, TelecomReceiver.ACTION_PUSH_MESSAGE_DATA, args);
                 } else if(isFirstTry) {
                     processRcsReceiver(context, intent, false);
                 }

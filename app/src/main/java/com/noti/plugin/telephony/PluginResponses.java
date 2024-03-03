@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
+import com.noti.plugin.data.NotificationData;
 import com.noti.plugin.data.PairDeviceInfo;
 import com.noti.plugin.listener.PluginResponse;
 
@@ -30,5 +31,10 @@ public class PluginResponses implements PluginResponse {
     @Override
     public void onReceiveException(Context context, Exception e) {
         e.printStackTrace();
+    }
+
+    @Override
+    public void onNotificationReceived(Context context, NotificationData notification) {
+
     }
 }

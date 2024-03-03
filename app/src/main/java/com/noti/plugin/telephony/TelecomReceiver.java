@@ -17,20 +17,23 @@ import com.noti.plugin.process.PluginAction;
 public class TelecomReceiver extends BroadcastReceiver {
 
     private static final String PHONE_STATE = "android.intent.action.PHONE_STATE";
+    public static final String ACTION_PUSH_MESSAGE_DATA = "push_message_data";
+    public static final String ACTION_PUSH_CALL_DATA = "push_call_data";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         SharedPreferences prefs = Application.getSharedPreferences(context);
 
-        switch (action) {
+        if (action != null) switch (action) {
             case PHONE_STATE:
                 if (prefs.getBoolean("callReceiveEnabled", false)) {
                     String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
                     String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
                     if (phoneNumber != null && TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-                        PluginAction.pushCallData(context, phoneNumber, getContactNameFromPhoneNumber(context, phoneNumber));
+                        String args = phoneNumber + "|" + getContactNameFromPhoneNumber(context, phoneNumber);
+                        PluginAction.responseHostApiInject(context, null, ACTION_PUSH_CALL_DATA, args);
                     }
                 }
                 break;
@@ -39,7 +42,8 @@ public class TelecomReceiver extends BroadcastReceiver {
                 if (prefs.getBoolean("messageReceiveEnabled", false)) {
                     SmsMessage message = Telephony.Sms.Intents.getMessagesFromIntent(intent)[0];
                     String address = message.getOriginatingAddress();
-                    PluginAction.pushMessageData(context, address, getContactNameFromPhoneNumber(context, address), message.getMessageBody());
+                    String args = address + "|" + message + "|" + getContactNameFromPhoneNumber(context, address);
+                    PluginAction.responseHostApiInject(context, null, ACTION_PUSH_MESSAGE_DATA, args);
                 }
                 break;
         }
