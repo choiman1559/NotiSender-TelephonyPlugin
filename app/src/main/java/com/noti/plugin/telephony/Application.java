@@ -25,6 +25,12 @@ public class Application extends android.app.Application {
         plugin.setPluginTitle("Telephony Plugin");
         plugin.setRequireSensitiveAPI(false);
 
+        try {
+            plugin.setPluginHostInject(SendSmsWorker.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         checkPermission(context);
     }
 

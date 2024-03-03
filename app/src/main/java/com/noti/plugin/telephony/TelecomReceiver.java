@@ -17,6 +17,8 @@ import com.noti.plugin.process.PluginAction;
 public class TelecomReceiver extends BroadcastReceiver {
 
     private static final String PHONE_STATE = "android.intent.action.PHONE_STATE";
+
+    public static final String ACTION_REQUEST_SEND_SMS = "request_send_sms";
     public static final String ACTION_PUSH_MESSAGE_DATA = "push_message_data";
     public static final String ACTION_PUSH_CALL_DATA = "push_call_data";
 
